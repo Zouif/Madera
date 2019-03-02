@@ -35,7 +35,11 @@
                         </a>
 
                     </div>
-                    <input type="text" class="form-control" name="ref_client" value="{{$id}}"/>
+                    @if(session()->get('id'))
+                        <input type="text" class="form-control" name="ref_client" value="{{ session()->get('id') }}"/>
+                    @else
+                        <input type="text" class="form-control" name="ref_client"/>
+                    @endif
                 </div>
 
                 <button type="submit" class="btn btn-primary">Add</button>

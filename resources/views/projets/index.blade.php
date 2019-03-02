@@ -23,7 +23,7 @@
             </form>
         </div>
             <div class="text-center mb-3">
-                <a href="{{ url('/projets/aaaaa') }}" class="">
+                <a href="{{ url('/projets/create') }}" class="">
                     <button type="submit" class="btn btn-primary">Creer un nouveau projet</button>
                 </a>
             </div>

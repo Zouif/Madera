@@ -86,7 +86,7 @@ class ProjetController extends Controller
     public function show($id_client)
     {
 
-        return view('projets.create', ['id' => $id_client]);
+        return redirect('/projets/create')->with('id', $id_client);
 
     }
 

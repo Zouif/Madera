@@ -58,8 +58,7 @@ class ClientController extends Controller
             'adresse_client'=>'required',
             'nom_collectivite'=>'required',
             'telephone_client'=>'required',
-            'mail_client'=>'required',
-            'ref_client'=>'required'
+            'mail_client'=>'required'
         ]);
         $client = new client([
             'nom_client' => $request->get('nom_client'),
@@ -68,7 +67,7 @@ class ClientController extends Controller
             'nom_collectivite' => $request->get('nom_collectivite'),
             'telephone_client'=> $request->get('telephone_client'),
             'mail_client'=> $request->get('mail_client'),
-            'ref_client'=> $request->get('ref_client')
+            'ref_client'=> str_random(5)
         ]);
         $client->save();
         return redirect('/clients')->with('success', 'Un client a été rajouté');
@@ -114,8 +113,7 @@ class ClientController extends Controller
             'adresse_client'=>'required',
             'nom_collectivite'=>'required',
             'telephone_client'=>'required',
-            'mail_client'=>'required',
-            'ref_client'=>'required'
+            'mail_client'=>'required'
         ]);
 
         $client = client::find($id_client);
@@ -125,7 +123,6 @@ class ClientController extends Controller
         $client->nom_collectivite = $request->get('nom_collectivite');
         $client->telephone_client = $request->get('telephone_client');
         $client->mail_client = $request->get('mail_client');
-        $client->ref_client = $request->get('ref_client');
         $client->save();
 
         return redirect('/clients')->with('success', 'Le client a été mis a jour');

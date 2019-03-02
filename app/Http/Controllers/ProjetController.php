@@ -29,6 +29,8 @@ class ProjetController extends Controller
      */
     public function create()
     {
+        //$id = $request->get('id');
+
         return view('projets.create');
     }
 
@@ -44,7 +46,7 @@ class ProjetController extends Controller
             ->orWhere('date_projet', 'like', '%' . $search . '%')
             ->orWhere('ref_projet', 'like', '%' . $search . '%');
         $projets = $projets->get();
-        return view('projets.index', ['projet' => $projets]);
+        return view('projets.index', ['projets' => $projets]);
     }
     /**
      * Store a newly created resource in storage.
@@ -56,16 +58,20 @@ class ProjetController extends Controller
     {
 
         $request->validate([
-            'id_client'=>'required',
-            'nom_projet'=>'required',
-            'ref_projet'=>'required'
+            'ref_client'=>'required',
+            'nom_projet'=>'required'
+
         ]);
+
+        $clients = DB::table('client')->where('ref_client', '=', $request->get('ref_client'));
+        $clients = $clients->get();
+
         $projet = new projet([
-            'id_client' => $request->get('id_client'),
+            'id_client' => $clients[0]->id_client,
             'id_user'=> auth()->id(),
             'nom_projet'=> $request->get('nom_projet'),
             'date_projet' => Carbon::now()->toDateTimeString(),
-            'ref_projet'=> $request->get('ref_projet')
+            'ref_projet'=> str_random(5)
         ]);
         $projet->save();
         return redirect('/projets')->with('success', 'Un projet a été rajouté');
@@ -77,9 +83,11 @@ class ProjetController extends Controller
      * @param  int  $id_projet
      * @return \Illuminate\Http\Response
      */
-    public function show($id_projet)
+    public function show($id_client)
     {
-        //
+
+        return view('projets.create', ['id' => $id_client]);
+
     }
 
     /**

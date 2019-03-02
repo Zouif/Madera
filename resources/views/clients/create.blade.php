@@ -47,10 +47,6 @@
                     <label for="mail">mail client:</label>
                     <input type="text" class="form-control" name="mail_client"/>
                 </div>
-                <div class="form-group">
-                    <label for="ref">ref client:</label>
-                    <input type="text" class="form-control" name="ref_client"/>
-                </div>
                 <button type="submit" class="btn btn-primary">Add</button>
             </form>
         </div>

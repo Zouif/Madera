@@ -61,6 +61,7 @@
                             <button class="btn btn-danger" type="submit">Delete</button>
                         </form>
                     </td>
+                    <td><a href="{{ route('projets.show', $client->ref_client) }}" class="btn btn-primary">Add project with this client</a></td>
                 </tr>
             @endforeach
             </tbody>

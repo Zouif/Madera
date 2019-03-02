@@ -27,14 +27,15 @@
                     <label for="nom">nom projet:</label>
                     <input type="text" class="form-control" name="nom_projet"/>
                 </div>
-                <div class="form-group">
-                    <label for="adresse">ref projet:</label>
-                    <input type="text" class="form-control" name="ref_projet"/>
-                </div>
 
                 <div class="form-group">
-                    <label for="collectivite">id client:</label>
-                    <input type="text" class="form-control" name="id_client"/>
+                    <div class="input-group">
+                        <a href="http://127.0.0.1:8000/clients" class="btn btn-primary">
+                            choisir client
+                        </a>
+
+                    </div>
+                    <input type="text" class="form-control" name="ref_client" value="{{$id}}"/>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Add</button>

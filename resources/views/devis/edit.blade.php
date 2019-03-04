@@ -33,7 +33,7 @@
                     <input type="text" class="form-control" name="date_projet" value="{{$projet->date_projet}}" />
                 </div>
                 <button type="submit" class="btn btn-primary">Update</button>
-                <a href="{{ action('ProjetController@index') }}" class="btn btn-danger">Annuler</a>
+                <a href="{{ action('DevisController@index') }}" class="btn btn-danger">Annuler</a>
             </form>
         </div>
     </div>

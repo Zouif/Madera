@@ -31,20 +31,21 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <td>ID Client</td>
-                <td> nom</td>
-                <td> date</td>
-                <td> ref</td>
+                <td>Ref Client</td>
+                <td> Nom</td>
+                <td> Date</td>
+                <td> Ref Projet</td>
                 <td colspan="2">Action</td>
             </tr>
             </thead>
             <tbody>
             @foreach($projets as $projet)
                 <tr>
-                    <td>{{$projet->id_client}}</td>
+                    <td>{{$projet->ref_client}}</td>
                     <td>{{$projet->nom_projet}}</td>
                     <td>{{$projet->date_projet}}</td>
                     <td>{{$projet->ref_projet}}</td>
+                    <td><a href="{{ action('DevisController@index', ['ref'=>$projet->ref_projet])}}" class="btn btn-primary">Devis</a></td>
                     <td><a href="{{ route('projets.edit',$projet->id_projet)}}" class="btn btn-primary">Edit</a></td>
                     <td>
                         <form action="{{ route('projets.destroy', $projet->id_projet)}}" method="post">

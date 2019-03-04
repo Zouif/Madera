@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Projet;
 use Illuminate\Support\Facades\DB;
-use App\User;
+use App\Client;
 use Carbon\Carbon;
+use App\Dao\ProjetDao;
 
 class ProjetController extends Controller
 {
+    public $projetDao;
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +19,8 @@ class ProjetController extends Controller
      */
     public function index()
     {
-        $projets = projet::all()->Where('id_user', '=', auth()->id());
+        $projetDao = new ProjetDao();
+        $projets = $projetDao->selectProjetAndRefClientByIdUser(auth()->id());
 
         return view('projets.index', compact('projets'));
     }
@@ -37,14 +40,41 @@ class ProjetController extends Controller
 
     public function search(Request $request)
     {
+        //dd($request->all());
+
         $search = $request->get('search');
-        //$projets = projet::all();
-        $projets = DB::table('projet')->where('id_projet', 'like', '%' . $search . '%')
-            ->orWhere('id_client', 'like', '%' . $search . '%')
-            ->orWhere('id_user', 'like', '%' . $search . '%')
-            ->orWhere('nom_projet', 'like', '%' . $search . '%')
-            ->orWhere('date_projet', 'like', '%' . $search . '%')
-            ->orWhere('ref_projet', 'like', '%' . $search . '%');
+
+        $projets = DB::table('projet')->join('client', 'client.id_client', '=', 'projet.id_client')
+            ->Where(
+                [
+                    ['id_user', '=', auth()->id()],
+                    ['id_projet', 'like', '%' . $search . '%']
+                ])
+            ->orWhere(
+                [
+                    ['id_user', '=', auth()->id()],
+                    ['ref_client', 'like', '%' . $search . '%']
+                ])
+            ->orWhere(
+                [
+                    ['id_user', '=', auth()->id()],
+                    ['id_user', 'like', '%' . $search . '%']
+                ])
+            ->orWhere(
+                [
+                    ['id_user', '=', auth()->id()],
+                    ['nom_projet', 'like', '%' . $search . '%']
+                ])
+            ->orWhere(
+                [
+                    ['id_user', '=', auth()->id()],
+                    ['date_projet', 'like', '%' . $search . '%']
+                ])
+            ->orWhere(
+                [
+                    ['id_user', '=', auth()->id()],
+                    ['ref_projet', 'like', '%' . $search . '%']
+                ]);
         $projets = $projets->get();
         return view('projets.index', ['projets' => $projets]);
     }

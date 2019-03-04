@@ -49,6 +49,7 @@
                     <input type="text" class="form-control" name="mail_client" value="{{$client->mail_client}}" />
                 </div>
                 <button type="submit" class="btn btn-primary">Update</button>
+                <a href="{{ action('ClientController@index') }}" class="btn btn-danger">Annuler</a>
             </form>
         </div>
     </div>

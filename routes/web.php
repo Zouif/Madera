@@ -30,16 +30,37 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/home', function(){
         return view('home');
     })->name('home');
-    Route::get('/dashboard', function(){
-        //si j'ai besoin que la route soit spécifique à un role, il faut retourner un controller (AdminController) pour gerer cela)
-            return view('dashboard');
-    })->name('dashboard');
+
+    // Client
+    Route::get('/searchClients', 'ClientController@search');
+    Route::resource('clients', 'ClientController');
+
+    //Projet
+    Route::get('/searchProjets', 'ProjetController@search');
+    //Route::get('/projets?search=(.*)', 'ProjetController@search');
+    Route::resource('projets', 'ProjetController');
+
+    //Devis
+    Route::get('/projets/{ref}/devis', 'DevisController@index');
+    Route::get('/projets/{ref}/devis/{ref_devis}/edit', 'DevisController@edit');
 });
 
-// Client
-Route::resource('clients', 'ClientController');
-Route::get('/searchClients', 'ClientController@search');
 
-//Projet
-Route::resource('projets', 'ProjetController');
-Route::get('/searchProjets', 'ProjetController@search');
+
+//Devis
+//Route::resource('devis', 'DevisController');
+//Route::get('projets/{ref}/devis', function(){
+//    return view('devis.index');
+//})->name('devis');
+
+
+// Client
+//Route::get('/searchClients', 'ClientController@search');
+//Route::resource('clients', 'ClientController');
+//
+////Projet
+//Route::get('/searchProjets', 'ProjetController@search');
+//Route::resource('projets', 'ProjetController');
+//
+////Devis
+//Route::get('/projets/{ref}/devis', 'DevisController@index');

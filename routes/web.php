@@ -37,7 +37,6 @@ Route::group(['middleware' => 'auth'], function(){
 
     //Projet
     Route::get('/searchProjets', 'ProjetController@search');
-    //Route::get('/projets?search=(.*)', 'ProjetController@search');
     Route::resource('projets', 'ProjetController');
 
     //Devis
@@ -49,9 +48,17 @@ Route::group(['middleware' => 'auth'], function(){
     //Module
     Route::get('/modules', 'ModuleController@index');
     Route::get('/searchModules', 'ModuleController@search');
+    Route::get('/devis/create/module', [
+        'uses' => 'ModuleController@sendToDevis'
+    ]);
     Route::resource('modules', 'ModuleController');
 
     //Couverture
+    Route::get('/couvertures', 'CouvertureController@index');
+    Route::get('/searchCouvertures', 'CouvertureController@search');
+    Route::get('/devis/create/couverture', [
+        'uses' => 'CouvertureController@sendToDevis'
+    ]);
     Route::resource('couvertures', 'CouvertureController');
 
     //Cctp
@@ -63,30 +70,4 @@ Route::group(['middleware' => 'auth'], function(){
     //Gamme
     Route::resource('gammes', 'GammeController');
 
-    //Module
-    Route::get('/devis/create/module', [
-        'uses' => 'ModuleController@sendToDevis'
-    ]);
-    Route::resource('modules', 'ModuleController');
-
 });
-
-
-
-//Devis
-//Route::resource('devis', 'DevisController');
-//Route::get('projets/{ref}/devis', function(){
-//    return view('devis.index');
-//})->name('devis');
-
-
-// Client
-//Route::get('/searchClients', 'ClientController@search');
-//Route::resource('clients', 'ClientController');
-//
-////Projet
-//Route::get('/searchProjets', 'ProjetController@search');
-//Route::resource('projets', 'ProjetController');
-//
-////Devis
-//Route::get('/projets/{ref}/devis', 'DevisController@index');

@@ -36,8 +36,8 @@
                             Choisir Couverture
                         </a>
                     </div>
-                    @if(session()->get('id'))
-                        <input type="text" class="form-control" name="ref_client" disabled="disabled" value="{{ session()->get('id') }}"/>
+                    @if(session()->get('couverture'))
+                        <input type="text" class="form-control" name="ref_client" disabled="disabled" value="{{ session()->get('couverture.nom_couverture') }}"/>
                     @endif
 
                     {{--CCTP--}}

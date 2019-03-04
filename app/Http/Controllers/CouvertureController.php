@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Client;
+use App\Couverture;
 use Illuminate\Support\Facades\DB;
 
 class CouvertureController extends Controller
@@ -15,9 +15,9 @@ class CouvertureController extends Controller
      */
     public function index()
     {
-        $clients = client::all();
+        $couvertures = couverture::all();
 
-        return view('clients.index', compact('clients'));
+        return view('couvertures.index', compact('couvertures'));
     }
 
     /**
@@ -27,22 +27,17 @@ class CouvertureController extends Controller
      */
     public function create()
     {
-        return view('clients.create');
+        return view('couvertures.create');
     }
 
 
     public function search(Request $request){
         $search = $request->get('search');
-        //$clients = client::all();
-        $clients = DB::table('client')->where('nom_client', 'like' , '%' . $search . '%')
-            ->orWhere('prenom_client', 'like' , '%' . $search . '%')
-            ->orWhere('adresse_client', 'like' , '%' . $search . '%')
-            ->orWhere('nom_collectivite', 'like' , '%' . $search . '%')
-            ->orWhere('telephone_client', 'like' , '%' . $search . '%')
-            ->orWhere('mail_client', 'like' , '%' . $search . '%')
-            ->orWhere('ref_client', 'like' , '%' . $search . '%');
-        $clients = $clients->get();
-        return view('clients.index', ['clients' => $clients]);
+        //$couvertures = couverture::all();
+        $couvertures = DB::table('couverture')->where('nom_couverture', 'like' , '%' . $search . '%')
+            ->orWhere('prix_couverture', 'like' , '%' . $search . '%');
+        $couvertures = $couvertures->get();
+        return view('couvertures.index', ['couvertures' => $couvertures]);
     }
     /**
      * Store a newly created resource in storage.
@@ -53,33 +48,33 @@ class CouvertureController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nom_client'=>'required',
-            'prenom_client'=>'required',
-            'adresse_client'=>'required',
+            'nom_couverture'=>'required',
+            'prenom_couverture'=>'required',
+            'adresse_couverture'=>'required',
             'nom_collectivite'=>'required',
-            'telephone_client'=>'required',
-            'mail_client'=>'required'
+            'telephone_couverture'=>'required',
+            'mail_couverture'=>'required'
         ]);
-        $client = new client([
-            'nom_client' => $request->get('nom_client'),
-            'prenom_client'=> $request->get('prenom_client'),
-            'adresse_client'=> $request->get('adresse_client'),
+        $couverture = new couverture([
+            'nom_couverture' => $request->get('nom_couverture'),
+            'prenom_couverture'=> $request->get('prenom_couverture'),
+            'adresse_couverture'=> $request->get('adresse_couverture'),
             'nom_collectivite' => $request->get('nom_collectivite'),
-            'telephone_client'=> $request->get('telephone_client'),
-            'mail_client'=> $request->get('mail_client'),
-            'ref_client'=> str_random(5)
+            'telephone_couverture'=> $request->get('telephone_couverture'),
+            'mail_couverture'=> $request->get('mail_couverture'),
+            'ref_couverture'=> str_random(5)
         ]);
-        $client->save();
-        return redirect('/clients')->with('success', 'Un client a été rajouté');
+        $couverture->save();
+        return redirect('/couvertures')->with('success', 'Un couverture a été rajouté');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id_client
+     * @param  int  $id_couverture
      * @return \Illuminate\Http\Response
      */
-    public function show($id_client)
+    public function show($id_couverture)
     {
         //
     }
@@ -87,58 +82,66 @@ class CouvertureController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id_client
+     * @param  int  $id_couverture
      * @return \Illuminate\Http\Response
      */
-    public function edit($id_client)
+    public function edit($id_couverture)
     {
 
-        $client = client::find($id_client);
+        $couverture = couverture::find($id_couverture);
 
-        return view('clients.edit', compact('client'));
+        return view('couvertures.edit', compact('couverture'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id_client
+     * @param  int  $id_couverture
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id_client)
+    public function update(Request $request, $id_couverture)
     {
         $request->validate([
-            'nom_client'=>'required',
-            'prenom_client'=>'required',
-            'adresse_client'=>'required',
+            'nom_couverture'=>'required',
+            'prenom_couverture'=>'required',
+            'adresse_couverture'=>'required',
             'nom_collectivite'=>'required',
-            'telephone_client'=>'required',
-            'mail_client'=>'required'
+            'telephone_couverture'=>'required',
+            'mail_couverture'=>'required'
         ]);
 
-        $client = client::find($id_client);
-        $client->nom_client = $request->get('nom_client');
-        $client->prenom_client = $request->get('prenom_client');
-        $client->adresse_client = $request->get('adresse_client');
-        $client->nom_collectivite = $request->get('nom_collectivite');
-        $client->telephone_client = $request->get('telephone_client');
-        $client->mail_client = $request->get('mail_client');
-        $client->save();
+        $couverture = couverture::find($id_couverture);
+        $couverture->nom_couverture = $request->get('nom_couverture');
+        $couverture->prenom_couverture = $request->get('prenom_couverture');
+        $couverture->adresse_couverture = $request->get('adresse_couverture');
+        $couverture->nom_collectivite = $request->get('nom_collectivite');
+        $couverture->telephone_couverture = $request->get('telephone_couverture');
+        $couverture->mail_couverture = $request->get('mail_couverture');
+        $couverture->save();
 
-        return redirect('/clients')->with('success', 'Le client a été mis a jour');
+        return redirect('/couvertures')->with('success', 'Le couverture a été mis a jour');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id_client
+     * @param  int  $id_couverture
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id_client)
+    public function destroy($id_couverture)
     {
-        $client = client::find($id_client);
-        $client->delete();
+        $couverture = couverture::find($id_couverture);
+        $couverture->delete();
 
-        return redirect('/clients')->with('success', 'Un client a été supprimé');
+        return redirect('/couvertures')->with('success', 'Un couverture a été supprimé');
+    }
+
+    public function sendToDevis(Request $request)
+    {
+        $couverture = couverture::find($request->id_couverture);
+        session()->put('couverture', $couverture);
+        return redirect('/devis/create');
+
     }
 }

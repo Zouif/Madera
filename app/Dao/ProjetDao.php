@@ -15,20 +15,20 @@ class ProjetDao
     public function selectProjetAndRefClientByIdUser($id_user)
     {
         $projets = ProjetDao::selectProjetByIdUser($id_user);
-        return ProjetDao::addRefClientToProjets($projets);
+        return ProjetDao::addRefClientToObjects($projets);
     }
 
     public function selectProjetByIdUser($id_user){
         return projet::all()->Where('id_user', '=', $id_user);
     }
 
-    public function addRefClientToProjets($projets){
+    public function addRefClientToObjects($objects){
         $clientDao = new ClientDao();
-        foreach ($projets as $projet) {
-            $client = $clientDao->clientById($projet->id_client);
-            $projet->ref_client = $client->ref_client;
+        foreach ($objects as $object) {
+            $client = $clientDao->clientById($object->id_client);
+            $object->ref_client = $client->ref_client;
         }
-        return $projets;
+        return $objects;
     }
 
 }

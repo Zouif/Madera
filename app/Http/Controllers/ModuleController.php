@@ -31,8 +31,6 @@ class ModuleController extends Controller
     public function create()
     {
         //$id = $request->get('id');
-
-        return view('modules.create');
     }
 
 
@@ -85,24 +83,7 @@ class ModuleController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate([
-            'ref_client'=>'required',
-            'nom_module'=>'required'
 
-        ]);
-
-        $clients = DB::table('client')->where('ref_client', '=', $request->get('ref_client'));
-        $clients = $clients->get();
-
-        $module = new module([
-            'id_client' => $clients[0]->id_client,
-            'id_user'=> auth()->id(),
-            'nom_module'=> $request->get('nom_module'),
-            'date_module' => Carbon::now()->toDateTimeString(),
-            'ref_module'=> str_random(5)
-        ]);
-        $module->save();
-        return redirect('/modules')->with('success', 'Un modules a été rajouté');
     }
 
     /**
@@ -166,5 +147,13 @@ class ModuleController extends Controller
         $module->delete();
 
         return redirect('/modules')->with('success', 'Un modules a été supprimé');
+    }
+
+    public function sendToDevis(Request $request)
+    {
+        $module = module::find($request->id_module);
+        session()->push('modules', $module);
+        return redirect('/devis/create');
+
     }
 }

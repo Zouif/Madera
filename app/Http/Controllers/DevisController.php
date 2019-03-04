@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Devis;
+use App\Module;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -177,5 +178,12 @@ class DevisController extends Controller
         $devis->delete();
 
         return redirect('/deviss')->with('success', 'Un devis a été supprimé');
+    }
+
+    public function deleteModule(Request $request)
+    {
+        session()->pull('modules.' . $request->key_module);
+        return redirect('/devis/create');
+
     }
 }

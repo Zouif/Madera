@@ -32,53 +32,56 @@
 
                     {{--COUVERTURE--}}
                     <div class="input-group m-2">
-                        <a href="{{ url('couverture')}}" class="btn btn-primary">
-                            Add Couverture
+                        <a href="{{ url('couvertures')}}" class="btn btn-primary">
+                            Choisir Couverture
                         </a>
                     </div>
                     @if(session()->get('id'))
-                        <input type="text" class="form-control" name="ref_client" value="{{ session()->get('id') }}"/>
+                        <input type="text" class="form-control" name="ref_client" disabled="disabled" value="{{ session()->get('id') }}"/>
                     @endif
 
                     {{--CCTP--}}
                     <div class="input-group m-2">
-                        <a href="{{ url('cctp')}}" class="btn btn-primary">
-                            Add Cctp
+                        <a href="{{ url('cctps')}}" class="btn btn-primary">
+                            Choisir Cctp
                         </a>
                     </div>
                     @if(session()->get('id'))
-                        <input type="text" class="form-control" name="ref_client" value="{{ session()->get('id') }}"/>
+                        <input type="text" class="form-control" name="ref_client" disabled="disabled" value="{{ session()->get('id') }}"/>
                     @endif
 
                     {{--COUPE PRINCIPE--}}
                     <div class="input-group m-2">
-                        <a href="{{ url('coupeprincipe')}}" class="btn btn-primary">
-                            Add Coupe Principe
+                        <a href="{{ url('coupeprincipes')}}" class="btn btn-primary">
+                            Choisir Coupe Principe
                         </a>
                     </div>
                     @if(session()->get('id'))
-                        <input type="text" class="form-control" name="ref_client" value="{{ session()->get('id') }}"/>
+                        <input type="text" class="form-control" name="ref_client" disabled="disabled" value="{{ session()->get('id') }}"/>
                     @endif
 
                     {{--GAMME--}}
                     <div class="input-group m-2">
-                        <a href="{{ url('gamme')}}" class="btn btn-primary">
-                            Add Gamme
+                        <a href="{{ url('gammes')}}" class="btn btn-primary">
+                            Choisir Gamme
                         </a>
                     </div>
                     @if(session()->get('id'))
-                        <input type="text" class="form-control" name="ref_client" value="{{ session()->get('id') }}"/>
+                        <input type="text" class="form-control" name="ref_client" disabled="disabled" value="{{ session()->get('id') }}"/>
                     @endif
 
                     {{--MODULE--}}
                     <div class="input-group m-2">
-                        <a href="{{ url('module')}}" class="btn btn-primary">
+                        <a href="{{ url('modules')}}" class="btn btn-primary">
                             Add Module
                         </a>
                     </div>
-                    @if(session()->get('module'))
-                        @foreach (session()->get('module') as $module)
-                            <input type="text" class="form-control" name="ref_client" value="{{ session()->get('id') }}"/>
+                    @if(session()->get('modules'))
+                        @foreach (session()->get('modules') as $key=>$module)
+                            <div class="input-group m-2">
+                                <input type="text" class="form-control" name="nom_module" disabled="disabled" value="{{ $module->nom_module }}"/>
+                                <a href="{{ action('DevisController@deleteModule', ['key_module' => $key]) }}" class="btn btn-danger">Supprimer</a>
+                            </div>
                         @endforeach
                     @endif
 

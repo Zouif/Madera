@@ -41,6 +41,9 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('projets', 'ProjetController');
 
     //Devis
+    Route::get('/devis/delete/module', [
+        'uses' => 'DevisController@deleteModule'
+    ]);
     Route::resource('devis', 'DevisController');
 
     //Module
@@ -61,6 +64,9 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('gammes', 'GammeController');
 
     //Module
+    Route::get('/devis/create/module', [
+        'uses' => 'ModuleController@sendToDevis'
+    ]);
     Route::resource('modules', 'ModuleController');
 
 });

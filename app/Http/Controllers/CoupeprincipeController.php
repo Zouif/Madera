@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Client;
 use Illuminate\Support\Facades\DB;
+use App\Coupeprincipe;
 
 class CoupeprincipeController extends Controller
 {
@@ -15,34 +16,41 @@ class CoupeprincipeController extends Controller
      */
     public function index()
     {
-        $clients = client::all();
+        $coupeprincipes = Coupeprincipe::all();
 
-        return view('clients.index', compact('clients'));
+        return view('coupeprincipes.index', compact('coupeprincipes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    /* Show the form for creating a new resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
     public function create()
     {
-        return view('clients.create');
+        //$id = $request->get('id');
     }
 
 
-    public function search(Request $request){
+    public function search(Request $request)
+    {
+        //dd($request->all());
+
         $search = $request->get('search');
-        //$clients = client::all();
-        $clients = DB::table('client')->where('nom_client', 'like' , '%' . $search . '%')
-                                            ->orWhere('prenom_client', 'like' , '%' . $search . '%')
-                                            ->orWhere('adresse_client', 'like' , '%' . $search . '%')
-                                            ->orWhere('nom_collectivite', 'like' , '%' . $search . '%')
-                                            ->orWhere('telephone_client', 'like' , '%' . $search . '%')
-                                            ->orWhere('mail_client', 'like' , '%' . $search . '%')
-                                            ->orWhere('ref_client', 'like' , '%' . $search . '%');
-        $clients = $clients->get();
-        return view('clients.index', ['clients' => $clients]);
+
+        $coupeprincipes = DB::table('coupe_principe')->Where(
+            [
+                ['id_coupe_principe', 'like', '%' . $search . '%']
+            ])
+            ->orWhere(
+                [
+                    ['nom_coupe_principe', 'like', '%' . $search . '%']
+                ])
+            ->orWhere(
+                [
+                    ['prix_coupe_principe', 'like', '%' . $search . '%']
+                ]);
+        $coupeprincipes = $coupeprincipes->get();
+        return view('coupeprincipes.index', ['coupeprincipes' => $coupeprincipes]);
     }
     /**
      * Store a newly created resource in storage.
@@ -52,93 +60,75 @@ class CoupeprincipeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nom_client'=>'required',
-            'prenom_client'=>'required',
-            'adresse_client'=>'required',
-            'nom_collectivite'=>'required',
-            'telephone_client'=>'required',
-            'mail_client'=>'required'
-        ]);
-        $client = new client([
-            'nom_client' => $request->get('nom_client'),
-            'prenom_client'=> $request->get('prenom_client'),
-            'adresse_client'=> $request->get('adresse_client'),
-            'nom_collectivite' => $request->get('nom_collectivite'),
-            'telephone_client'=> $request->get('telephone_client'),
-            'mail_client'=> $request->get('mail_client'),
-            'ref_client'=> str_random(5)
-        ]);
-        $client->save();
-        return redirect('/clients')->with('success', 'Un client a été rajouté');
+
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id_client
+     * @param  int  $id_module
      * @return \Illuminate\Http\Response
      */
     public function show($id_client)
     {
-        //
+
+        return redirect('/modules/create')->with('id', $id_client);
+
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id_client
+     * @param  int  $id_module
      * @return \Illuminate\Http\Response
      */
-    public function edit($id_client)
+    public function edit($id_module)
     {
 
-        $client = client::find($id_client);
+        $module = module::find($id_module);
 
-        return view('clients.edit', compact('client'));
+        return view('modules.edit', compact('module'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id_client
+     * @param  int  $id_module
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id_client)
+    public function update(Request $request, $id_module)
     {
         $request->validate([
-            'nom_client'=>'required',
-            'prenom_client'=>'required',
-            'adresse_client'=>'required',
-            'nom_collectivite'=>'required',
-            'telephone_client'=>'required',
-            'mail_client'=>'required'
+            'nom_module'=>'required',
+            'date_module'=>'required'
         ]);
 
-        $client = client::find($id_client);
-        $client->nom_client = $request->get('nom_client');
-        $client->prenom_client = $request->get('prenom_client');
-        $client->adresse_client = $request->get('adresse_client');
-        $client->nom_collectivite = $request->get('nom_collectivite');
-        $client->telephone_client = $request->get('telephone_client');
-        $client->mail_client = $request->get('mail_client');
-        $client->save();
+        $module = module::find($id_module);
+        $module->nom_module = $request->get('nom_module');
+        $module->date_module = $request->get('date_module');
+        $module->save();
 
-        return redirect('/clients')->with('success', 'Le client a été mis a jour');
+        return redirect('/modules')->with('success', 'Le modules a été mis a jour');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id_client
+     * @param  int  $id_module
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id_client)
+    public function destroy($id_module)
     {
-        $client = client::find($id_client);
-        $client->delete();
 
-        return redirect('/clients')->with('success', 'Un client a été supprimé');
+    }
+
+    public function sendToDevis(Request $request)
+    {
+        $coupeprincipe = coupeprincipe::find($request->id_coupe_principe);
+        session()->put('coupeprincipe',$coupeprincipe);
+        return redirect('/devis/create');
+
     }
 }

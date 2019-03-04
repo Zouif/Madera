@@ -70,6 +70,10 @@ Route::group(['middleware' => 'auth'], function(){
 
     //Coupe Principe
     Route::resource('coupeprincipes', 'CoupeprincipeController');
+    Route::get('/searchCoupeprincipes', 'CoupeprincipeController@search');
+    Route::get('/devis/create/coupeprincipe', [
+        'uses' => 'CoupeprincipeController@sendToDevis'
+    ]);
 
     //Gamme
     Route::resource('gammes', 'GammeController');

@@ -56,8 +56,8 @@
                             Choisir Coupe Principe
                         </a>
                     </div>
-                    @if(session()->get('id'))
-                        <input type="text" class="form-control" name="ref_client" disabled="disabled" value="{{ session()->get('id') }}"/>
+                    @if(session()->get('coupeprincipe'))
+                        <input type="text" class="form-control" name="ref_client" disabled="disabled" value="{{ session()->get('coupeprincipe.nom_coupe_principe') }}"/>
                     @endif
 
                     {{--GAMME--}}

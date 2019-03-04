@@ -46,8 +46,8 @@
                             Choisir Cctp
                         </a>
                     </div>
-                    @if(session()->get('id'))
-                        <input type="text" class="form-control" name="ref_client" disabled="disabled" value="{{ session()->get('id') }}"/>
+                    @if(session()->get('cctp'))
+                        <input type="text" class="form-control" name="ref_client" disabled="disabled" value="{{ session()->get('cctp.nom_cctp') }}"/>
                     @endif
 
                     {{--COUPE PRINCIPE--}}

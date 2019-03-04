@@ -63,6 +63,10 @@ Route::group(['middleware' => 'auth'], function(){
 
     //Cctp
     Route::resource('cctps', 'CctpController');
+    Route::get('/searchCctp', 'CctpController@search');
+    Route::get('/devis/create/cctp', [
+        'uses' => 'CctpController@sendToDevis'
+    ]);
 
     //Coupe Principe
     Route::resource('coupeprincipes', 'CoupeprincipeController');

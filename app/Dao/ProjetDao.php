@@ -9,6 +9,7 @@
 namespace App\Dao;
 
 use App\Projet;
+use Illuminate\Support\Facades\DB;
 
 class ProjetDao
 {
@@ -19,7 +20,12 @@ class ProjetDao
     }
 
     public function selectProjetByIdUser($id_user){
-        return projet::all()->Where('id_user', '=', $id_user);
+        $projet = DB::table('projet')->join('client', 'client.id_client', '=', 'projet.id_client')->Where(
+            [
+                ['projet.id_user', '=', $id_user],
+                ['client.archive', '=', false]
+        ]);
+        return $projet->get();
     }
 
     public function addRefClientToObjects($objects){

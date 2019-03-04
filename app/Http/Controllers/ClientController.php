@@ -15,7 +15,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = client::all();
+        $clients = client::all()->where('archive','=', false);
 
         return view('clients.index', compact('clients'));
     }
@@ -34,13 +34,35 @@ class ClientController extends Controller
     public function search(Request $request){
         $search = $request->get('search');
         //$clients = client::all();
-        $clients = DB::table('client')->where('nom_client', 'like' , '%' . $search . '%')
-                                            ->orWhere('prenom_client', 'like' , '%' . $search . '%')
-                                            ->orWhere('adresse_client', 'like' , '%' . $search . '%')
-                                            ->orWhere('nom_collectivite', 'like' , '%' . $search . '%')
-                                            ->orWhere('telephone_client', 'like' , '%' . $search . '%')
-                                            ->orWhere('mail_client', 'like' , '%' . $search . '%')
-                                            ->orWhere('ref_client', 'like' , '%' . $search . '%');
+        $clients = DB::table('client')
+            ->where([
+            ['archive', '=', false],
+            ['nom_client', 'like', '%' . $search . '%']
+        ])
+            ->orWhere([
+                ['archive', '=', false],
+                ['prenom_client', 'like', '%' . $search . '%']
+            ])
+            ->orWhere([
+                ['archive', '=', false],
+                ['adresse_client', 'like', '%' . $search . '%']
+            ])
+            ->orWhere([
+                ['archive', '=', false],
+                ['nom_collectivite', 'like', '%' . $search . '%']
+            ])
+            ->orWhere([
+                ['archive', '=', false],
+                ['telephone_client', 'like', '%' . $search . '%']
+            ])
+            ->orWhere([
+                ['archive', '=', false],
+                ['mail_client', 'like', '%' . $search . '%']
+            ])
+            ->orWhere([
+                ['archive', '=', false],
+                ['ref_client', 'like', '%' . $search . '%']
+            ]);
         $clients = $clients->get();
         return view('clients.index', ['clients' => $clients]);
     }
@@ -137,7 +159,8 @@ class ClientController extends Controller
     public function destroy($id_client)
     {
         $client = client::find($id_client);
-        $client->delete();
+        $client->archive = true;
+        $client->save();
 
         return redirect('/clients')->with('success', 'Un client a été supprimé');
     }

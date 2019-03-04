@@ -48,32 +48,38 @@ class ProjetController extends Controller
             ->Where(
                 [
                     ['id_user', '=', auth()->id()],
-                    ['id_projet', 'like', '%' . $search . '%']
+                    ['id_projet', 'like', '%' . $search . '%'],
+                    ['client.archive', '=', false]
                 ])
             ->orWhere(
                 [
                     ['id_user', '=', auth()->id()],
-                    ['ref_client', 'like', '%' . $search . '%']
+                    ['ref_client', 'like', '%' . $search . '%'],
+                    ['client.archive', '=', false]
                 ])
             ->orWhere(
                 [
                     ['id_user', '=', auth()->id()],
-                    ['id_user', 'like', '%' . $search . '%']
+                    ['id_user', 'like', '%' . $search . '%'],
+                    ['client.archive', '=', false]
                 ])
             ->orWhere(
                 [
                     ['id_user', '=', auth()->id()],
-                    ['nom_projet', 'like', '%' . $search . '%']
+                    ['nom_projet', 'like', '%' . $search . '%'],
+                    ['client.archive', '=', false]
                 ])
             ->orWhere(
                 [
                     ['id_user', '=', auth()->id()],
-                    ['date_projet', 'like', '%' . $search . '%']
+                    ['date_projet', 'like', '%' . $search . '%'],
+                    ['client.archive', '=', false]
                 ])
             ->orWhere(
                 [
                     ['id_user', '=', auth()->id()],
-                    ['ref_projet', 'like', '%' . $search . '%']
+                    ['ref_projet', 'like', '%' . $search . '%'],
+                    ['client.archive', '=', false]
                 ]);
         $projets = $projets->get();
         return view('projets.index', ['projets' => $projets]);

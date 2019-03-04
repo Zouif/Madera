@@ -48,6 +48,21 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/searchModules', 'ModuleController@search');
     Route::resource('modules', 'ModuleController');
 
+    //Couverture
+    Route::resource('couvertures', 'CouvertureController');
+
+    //Cctp
+    Route::resource('cctps', 'CctpController');
+
+    //Coupe Principe
+    Route::resource('coupeprincipes', 'CoupeprincipeController');
+
+    //Gamme
+    Route::resource('gammes', 'GammeController');
+
+    //Module
+    Route::resource('modules', 'ModuleController');
+
 });
 
 

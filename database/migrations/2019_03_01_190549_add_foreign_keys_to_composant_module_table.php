@@ -15,7 +15,7 @@ class AddForeignKeysToComposantModuleTable extends Migration {
 		Schema::table('composant_module', function(Blueprint $table)
 		{
 			$table->foreign('id_composant', 'composant_module_composant_FK')->references('id_composant')->on('composant')->onUpdate('RESTRICT')->onDelete('RESTRICT');
-			$table->foreign('id_module', 'composant_module_module0_FK')->references('id_module')->on('module')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+			$table->foreign('id_module', 'composant_module_module0_FK')->references('id_module')->on('modules')->onUpdate('RESTRICT')->onDelete('RESTRICT');
 		});
 	}
 

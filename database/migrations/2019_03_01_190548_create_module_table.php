@@ -12,7 +12,7 @@ class CreateModuleTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('module', function(Blueprint $table)
+		Schema::create('modules', function(Blueprint $table)
 		{
 			$table->integer('id_module', true);
 			$table->string('nom_module', 50);
@@ -29,7 +29,7 @@ class CreateModuleTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('module');
+		Schema::drop('modules');
 	}
 
 }

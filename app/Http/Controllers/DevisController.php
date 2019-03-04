@@ -69,30 +69,30 @@ class DevisController extends Controller
         $projets = DB::table('projet')->where('ref_client', '=', $ref);
         $projets = $projets->get();
 
-        $devis = new devis([
-
-            'id_etat_devis'=> 1,
-            'id_entreprise'=> 1,
-            'id_projet'=> $projets[0]->id_client,
-            'id_tva'=> 1,
-            'date_devis'=> Carbon::now()->toDateTimeString(),
-            'duree_validite_devis'=> Carbon::now()->toDateTimeString() + 654,
-            'taux_horaire_main_oeuvre'=>,
-            'montant_frais_deplacement'=>,
-            'prix_prestation'=>,
-            'modalite_decompte_passe'=>,
-            'taux_tva'=>,
-            'montant_tva'=>,
-            'prix_total_ht'=>,
-
-            'id_client' => $clients[0]->id_client,
-            'id_user'=> auth()->id(),
-            'nom_devis'=> $request->get('nom_devis'),
-            'date_devis' => Carbon::now()->toDateTimeString(),
-
-            'ref_devis'=> str_random(10)
-        ]);
-        $devis->save();
+//        $devis = new devis([
+//
+//            'id_etat_devis'=> 1,
+//            'id_entreprise'=> 1,
+//            'id_projet'=> $projets[0]->id_client,
+//            'id_tva'=> 1,
+//            'date_devis'=> Carbon::now()->toDateTimeString(),
+//            'duree_validite_devis'=> Carbon::now()->toDateTimeString() + 654,
+//            'taux_horaire_main_oeuvre'=>,
+//            'montant_frais_deplacement'=>,
+//            'prix_prestation'=>,
+//            'modalite_decompte_passe'=>,
+//            'taux_tva'=>,
+//            'montant_tva'=>,
+//            'prix_total_ht'=>,
+//
+//            'id_client' => $clients[0]->id_client,
+//            'id_user'=> auth()->id(),
+//            'nom_devis'=> $request->get('nom_devis'),
+//            'date_devis' => Carbon::now()->toDateTimeString(),
+//
+//            'ref_devis'=> str_random(10)
+//        ]);
+//        $devis->save();
         return redirect('/deviss')->with('success', 'Un devis a été rajouté');
     }
 

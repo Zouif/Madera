@@ -45,17 +45,11 @@ class LoginController extends Controller
         //dd($request->all());
 
         if(Auth::attempt([
-            'nom' => $request->login,
+            'login' => $request->login,
 
             'password' => $request->password
         ]))
         {
-            $user = User::where('nom', $request->login)->first();
-
-            if($user->is_admin())
-            {
-                return redirect()->route('dashboard');
-            }
             return redirect()->route('home');
         }
         return redirect()->back();

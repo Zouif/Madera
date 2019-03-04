@@ -43,6 +43,12 @@ Route::group(['middleware' => 'auth'], function(){
     //Devis
     Route::get('/projets/{ref}/devis', 'DevisController@index');
     Route::get('/projets/{ref}/devis/{ref_devis}/edit', 'DevisController@edit');
+
+    //Module
+    Route::get('/modules', 'ModuleController@index');
+    Route::get('/searchModules', 'ModuleController@search');
+    Route::resource('modules', 'ModuleController');
+
 });
 
 

@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Devis;
-use App\Module;
+use App\Produit;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-class DevisController extends Controller
+class ProduitController extends Controller
 {
     /**
      * Display a listing of the resource.

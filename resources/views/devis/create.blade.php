@@ -9,8 +9,11 @@
 
     <div class="card uper">
         <div class="card-header">
-            Add Share
+            Produit
         </div>
+        <a href="{{ url('module')}}" class="btn btn-primary">
+            Add Module
+        </a>
         <div class="card-body">
             @if ($errors->any())
                 <div class="alert alert-danger">

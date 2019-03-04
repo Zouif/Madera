@@ -41,8 +41,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('projets', 'ProjetController');
 
     //Devis
-    Route::get('/projets/{ref}/devis', 'DevisController@index');
-    Route::get('/projets/{ref}/devis/{ref_devis}/edit', 'DevisController@edit');
+    Route::resource('devis', 'DevisController');
 
     //Module
     Route::get('/modules', 'ModuleController@index');

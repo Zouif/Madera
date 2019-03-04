@@ -45,7 +45,7 @@
                     <td>{{$projet->nom_projet}}</td>
                     <td>{{$projet->date_projet}}</td>
                     <td>{{$projet->ref_projet}}</td>
-                    <td><a href="{{ action('DevisController@index', ['ref'=>$projet->ref_projet])}}" class="btn btn-primary">Devis</a></td>
+                    <td><a href="{{ route('devis.show', $projet->id_projet) }}" class="btn btn-primary">DevisV2</a></td>
                     <td><a href="{{ route('projets.edit',$projet->id_projet)}}" class="btn btn-primary">Edit</a></td>
                     <td>
                         <form action="{{ route('projets.destroy', $projet->id_projet)}}" method="post">

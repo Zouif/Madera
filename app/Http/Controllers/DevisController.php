@@ -14,9 +14,9 @@ class DevisController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($ref)
+    public function index()
     {
-        $listedevis = devis::all()->Where('ref_devis', '=', $ref);
+        $listedevis = devis::all()->Where('id_projet', '=', session()->get('id_projet'));
 
         return view('devis.index', ['listedevis' => $listedevis]);
     }
@@ -28,9 +28,30 @@ class DevisController extends Controller
      */
     public function create()
     {
-        //$id = $request->get('id');
 
-        return view('deviss.create');
+        $devis = new devis([
+            'id_etat_devis'=> 1,
+            'id_entreprise'=> 1,
+            'id_projet'=> session()->get('id_projet'),
+            'id_tva'=> 1,
+            'date_devis'=> Carbon::now()->toDateString(),
+            'duree_validite_devis'=> 90,
+            'taux_horaire_main_oeuvre'=> 0,
+            'montant_frais_deplacement'=> 0,
+            'prix_prestation'=> 0,
+            'modalite_decompte_passe'=> 0,
+            'taux_tva'=> 0,
+            'montant_tva'=> 0,
+            'prix_total_ht'=> 0,
+            'ref_devis'=> str_random(10)
+        ]);
+        $devis->save();
+
+        //$id = $request->get('id');
+        $listeproduits = DB::table('produit')->join('produit_devis', 'produit.id_produit', '=', 'produit_devis.id_produit')
+            ->Where('id_devis', '=', $devis->id_devis);
+
+        return view('devis.create');
     }
 
 
@@ -102,9 +123,10 @@ class DevisController extends Controller
      * @param  int  $id_devis
      * @return \Illuminate\Http\Response
      */
-    public function show($id_devis)
+    public function show($id_projet)
     {
-        return view('devis.index', compact($id_devis));
+        session()->put('id_projet', $id_projet);
+        return redirect('/devis');
     }
 
     /**

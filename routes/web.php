@@ -62,11 +62,11 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('couvertures', 'CouvertureController');
 
     //Cctp
-    Route::resource('cctps', 'CctpController');
     Route::get('/searchCctp', 'CctpController@search');
     Route::get('/devis/create/cctp', [
         'uses' => 'CctpController@sendToDevis'
     ]);
+    Route::resource('cctps', 'CctpController');
 
     //Coupe Principe
     Route::resource('coupeprincipes', 'CoupeprincipeController');
@@ -76,6 +76,11 @@ Route::group(['middleware' => 'auth'], function(){
     ]);
 
     //Gamme
+    Route::get('/gammes', 'GammeController@index');
+    Route::get('/searchGammes', 'GammeController@search');
+    Route::get('/devis/create/gamme', [
+        'uses' => 'GammeController@sendToDevis'
+    ]);
     Route::resource('gammes', 'GammeController');
 
 });

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Client;
+use App\Gamme;
 use Illuminate\Support\Facades\DB;
 
 class GammeController extends Controller
@@ -15,9 +15,9 @@ class GammeController extends Controller
      */
     public function index()
     {
-        $clients = client::all();
+        $gammes = gamme::all();
 
-        return view('clients.index', compact('clients'));
+        return view('gammes.index', compact('gammes'));
     }
 
     /**
@@ -27,22 +27,20 @@ class GammeController extends Controller
      */
     public function create()
     {
-        return view('clients.create');
+        return view('gammes.create');
     }
 
 
     public function search(Request $request){
         $search = $request->get('search');
-        //$clients = client::all();
-        $clients = DB::table('client')->where('nom_client', 'like' , '%' . $search . '%')
-                                            ->orWhere('prenom_client', 'like' , '%' . $search . '%')
-                                            ->orWhere('adresse_client', 'like' , '%' . $search . '%')
-                                            ->orWhere('nom_collectivite', 'like' , '%' . $search . '%')
-                                            ->orWhere('telephone_client', 'like' , '%' . $search . '%')
-                                            ->orWhere('mail_client', 'like' , '%' . $search . '%')
-                                            ->orWhere('ref_client', 'like' , '%' . $search . '%');
-        $clients = $clients->get();
-        return view('clients.index', ['clients' => $clients]);
+        //$gammes = gamme::all();
+        $gammes = DB::table('gamme')->where('nom_gamme', 'like' , '%' . $search . '%')
+            ->orWhere('finition_gamme', 'like' , '%' . $search . '%')
+            ->orWhere('huisseries_gamme', 'like' , '%' . $search . '%')
+            ->orWhere('isolant_gamme', 'like' , '%' . $search . '%')
+            ->orWhere('prix_gamme', 'like' , '%' . $search . '%');
+        $gammes = $gammes->get();
+        return view('gammes.index', ['gammes' => $gammes]);
     }
     /**
      * Store a newly created resource in storage.
@@ -53,33 +51,33 @@ class GammeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nom_client'=>'required',
-            'prenom_client'=>'required',
-            'adresse_client'=>'required',
+            'nom_gamme'=>'required',
+            'prenom_gamme'=>'required',
+            'adresse_gamme'=>'required',
             'nom_collectivite'=>'required',
-            'telephone_client'=>'required',
-            'mail_client'=>'required'
+            'telephone_gamme'=>'required',
+            'mail_gamme'=>'required'
         ]);
-        $client = new client([
-            'nom_client' => $request->get('nom_client'),
-            'prenom_client'=> $request->get('prenom_client'),
-            'adresse_client'=> $request->get('adresse_client'),
+        $gamme = new gamme([
+            'nom_gamme' => $request->get('nom_gamme'),
+            'prenom_gamme'=> $request->get('prenom_gamme'),
+            'adresse_gamme'=> $request->get('adresse_gamme'),
             'nom_collectivite' => $request->get('nom_collectivite'),
-            'telephone_client'=> $request->get('telephone_client'),
-            'mail_client'=> $request->get('mail_client'),
-            'ref_client'=> str_random(5)
+            'telephone_gamme'=> $request->get('telephone_gamme'),
+            'mail_gamme'=> $request->get('mail_gamme'),
+            'ref_gamme'=> str_random(5)
         ]);
-        $client->save();
-        return redirect('/clients')->with('success', 'Un client a été rajouté');
+        $gamme->save();
+        return redirect('/gammes')->with('success', 'Un gamme a été rajouté');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id_client
+     * @param  int  $id_gamme
      * @return \Illuminate\Http\Response
      */
-    public function show($id_client)
+    public function show($id_gamme)
     {
         //
     }
@@ -87,58 +85,66 @@ class GammeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id_client
+     * @param  int  $id_gamme
      * @return \Illuminate\Http\Response
      */
-    public function edit($id_client)
+    public function edit($id_gamme)
     {
 
-        $client = client::find($id_client);
+        $gamme = gamme::find($id_gamme);
 
-        return view('clients.edit', compact('client'));
+        return view('gammes.edit', compact('gamme'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id_client
+     * @param  int  $id_gamme
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id_client)
+    public function update(Request $request, $id_gamme)
     {
         $request->validate([
-            'nom_client'=>'required',
-            'prenom_client'=>'required',
-            'adresse_client'=>'required',
+            'nom_gamme'=>'required',
+            'prenom_gamme'=>'required',
+            'adresse_gamme'=>'required',
             'nom_collectivite'=>'required',
-            'telephone_client'=>'required',
-            'mail_client'=>'required'
+            'telephone_gamme'=>'required',
+            'mail_gamme'=>'required'
         ]);
 
-        $client = client::find($id_client);
-        $client->nom_client = $request->get('nom_client');
-        $client->prenom_client = $request->get('prenom_client');
-        $client->adresse_client = $request->get('adresse_client');
-        $client->nom_collectivite = $request->get('nom_collectivite');
-        $client->telephone_client = $request->get('telephone_client');
-        $client->mail_client = $request->get('mail_client');
-        $client->save();
+        $gamme = gamme::find($id_gamme);
+        $gamme->nom_gamme = $request->get('nom_gamme');
+        $gamme->prenom_gamme = $request->get('prenom_gamme');
+        $gamme->adresse_gamme = $request->get('adresse_gamme');
+        $gamme->nom_collectivite = $request->get('nom_collectivite');
+        $gamme->telephone_gamme = $request->get('telephone_gamme');
+        $gamme->mail_gamme = $request->get('mail_gamme');
+        $gamme->save();
 
-        return redirect('/clients')->with('success', 'Le client a été mis a jour');
+        return redirect('/gammes')->with('success', 'Le gamme a été mis a jour');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id_client
+     * @param  int  $id_gamme
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id_client)
+    public function destroy($id_gamme)
     {
-        $client = client::find($id_client);
-        $client->delete();
+        $gamme = gamme::find($id_gamme);
+        $gamme->delete();
 
-        return redirect('/clients')->with('success', 'Un client a été supprimé');
+        return redirect('/gammes')->with('success', 'Un gamme a été supprimé');
+    }
+
+    public function sendToDevis(Request $request)
+    {
+        $gamme = gamme::find($request->id_gamme);
+        session()->put('gamme', $gamme);
+        return redirect('/devis/create');
+
     }
 }

@@ -128,6 +128,9 @@ class CoupeprincipeController extends Controller
     {
         $coupeprincipe = coupeprincipe::find($request->id_coupe_principe);
         session()->put('coupeprincipe',$coupeprincipe);
+        if (strpos(session()->get('backUrl'), 'edit') !== false) {
+            return redirect('/produits/'. session()->get('produit.id_produit') .'/edit');
+        }
         return redirect('/produits/create');
 
     }

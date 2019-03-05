@@ -39,7 +39,7 @@
                     <td>{{$module->nom_module}}</td>
                     <td>{{$module->description_module}}</td>
                     <td>{{$module->prix_module}}</td>
-                    <td><a href="{{ action('ModuleController@sendToDevis', ['id_module' =>$module->id_module])}}" class="btn btn-primary">Add</a></td>
+                    <td><a href="{{ action('ModuleController@sendToDevis', ['id_module' =>$module->id_module, 'backUrl'=>url()->previous()])}}" class="btn btn-primary">Add</a></td>
                 </tr>
             @endforeach
             </tbody>

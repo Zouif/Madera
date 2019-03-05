@@ -128,6 +128,9 @@ class CctpController extends Controller
     {
         $cctp = cctp::find($request->id_cctp);
         session()->put('cctp',$cctp);
+        if (strpos(session()->get('backUrl'), 'edit') !== false) {
+            return redirect('/produits/'. session()->get('produit.id_produit') .'/edit');
+        }
         return redirect('/produits/create');
 
     }

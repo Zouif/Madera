@@ -144,6 +144,9 @@ class GammeController extends Controller
     {
         $gamme = gamme::find($request->id_gamme);
         session()->put('gamme', $gamme);
+        if (strpos(session()->get('backUrl'), 'edit') !== false) {
+            return redirect('/produits/'. session()->get('produit.id_produit') .'/edit');
+        }
         return redirect('/produits/create');
 
     }

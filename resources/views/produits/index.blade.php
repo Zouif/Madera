@@ -41,7 +41,8 @@
                     <td>{{$produit->id_cctp}}</td>
                     <td>{{$produit->id_gamme}}</td>
                     <td>{{$produit->id_coupe_principe}}</td>
-                    <td><a href="{{ route('produits.edit',$produit->id_produit)}}" class="btn btn-primary">Edit</a></td>
+
+                    <td><a href="{{ action('ProduitController@prepareedit', ['id_produit' => $produit->id_produit])}}" class="btn btn-primary">Edit</a></td>
                     <td>
                         <form action="{{ route('produits.destroy', $produit->id_produit)}}" method="post">
                             @csrf

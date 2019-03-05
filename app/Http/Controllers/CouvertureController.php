@@ -141,6 +141,9 @@ class CouvertureController extends Controller
     {
         $couverture = couverture::find($request->id_couverture);
         session()->put('couverture', $couverture);
+        if (strpos(session()->get('backUrl'), 'edit') !== false) {
+            return redirect('/produits/'. session()->get('produit.id_produit') .'/edit');
+        }
         return redirect('/produits/create');
 
     }

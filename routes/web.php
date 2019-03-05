@@ -50,6 +50,9 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/devis/delete/produit', [
         'uses' => 'ProduitController@deleteModule'
     ]);
+    Route::get('/produit/prepareedit', [
+        'uses' => 'ProduitController@prepareedit'
+    ]);
     Route::resource('produits', 'ProduitController');
 
     //Module

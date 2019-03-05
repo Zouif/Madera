@@ -8,6 +8,10 @@ use App\Devis;
 use App\Produit;
 use App\ProduitDevis;
 use App\ModuleProduit;
+use App\Couverture;
+use App\Cctp;
+use App\Gamme;
+use App\Coupeprincipe;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -20,6 +24,7 @@ class ProduitController extends Controller
      */
     public function index()
     {
+        ProduitController::initializeSession();
         $listeproduits = DB::table('produit')->join('produit_devis', 'produit.id_produit', '=', 'produit_devis.id_produit')
             ->Where('produit_devis.id_devis', '=', session()->get('id_devis'));
         $listeproduits = $listeproduits->get();
@@ -175,12 +180,48 @@ class ProduitController extends Controller
      * @param  int  $id_devis
      * @return \Illuminate\Http\Response
      */
-    public function edit($id_devis)
+    public function edit($id_produit)
     {
+        session()->put('prix_produit_ht',
 
-        $devis = devis::find($id_devis);
+            ProduitController::calculPrixProduit()
 
-        return view('deviss.edit', compact('devis'));
+        );
+
+        return view('produits.edit', compact('produit', session()->get('produit')));
+    }
+
+    public function prepareedit(Request $request){
+//        $listeproduits = DB::table('produit')
+
+        $listeproduits = produit::find($request->id_produit)
+            ->join('produit_devis', 'produit.id_produit', '=', 'produit_devis.id_produit')
+            ->Where('produit_devis.id_devis', '=', session()->get('id_devis'));
+        $listeproduits = $listeproduits->get();
+        $produit = $listeproduits[0];
+
+        $couverture = couverture::find($produit->id_couverture);
+
+        $cctp = cctp::find($produit->id_cctp);
+
+        $coupeprincipe = coupeprincipe::find($produit->id_coupe_principe);
+
+        $gamme = gamme::find($produit->id_gamme);
+
+        $modules = DB::table('module')->join('module_produit', 'module_produit.id_module', '=', 'module.id_module')
+            ->where('id_produit', '=', $produit->id_produit);
+        $modules = $modules->get();
+
+        session()->put('couverture', $couverture);
+        session()->put('cctp', $cctp);
+        session()->put('coupeprincipe', $coupeprincipe);
+        session()->put('gamme', $gamme);
+        session()->put('modules', $modules);
+        session()->put('produit', $produit);
+        //session d'edition
+        session()->put('backUrl', 'edit');
+
+        return redirect('/produits/'. $produit->id_produit .'/edit');
     }
 
     /**
@@ -190,19 +231,70 @@ class ProduitController extends Controller
      * @param  int  $id_devis
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id_devis)
+    public function update(Request $request)
     {
         $request->validate([
-            'nom_devis'=>'required',
-            'date_devis'=>'required'
+            'nom_produit'=>'required',
+            'quantite_produit'=>'required',
+            'prix_produit_ht'=>'required',
+            'nom_couverture'=>'required',
+            'nom_cctp'=>'required',
+            'nom_coupe_principe'=>'required',
+            'nom_gamme'=>'required',
+            'nom_module'=>'required'
         ]);
 
-        $devis = devis::find($id_devis);
-        $devis->nom_devis = $request->get('nom_devis');
-        $devis->date_devis = $request->get('date_devis');
+
+        $produit = new produit([
+            'nom_produit'=> $request->nom_produit,
+            'taux_tva'=> 0,
+            'prix_produit_ht'=> $request->prix_produit_ht,
+            'id_couverture'=> session()->get('couverture.id_couverture'),
+            'id_cctp'=> session()->get('cctp.id_cctp'),
+            'id_gamme'=> session()->get('gamme.id_gamme'),
+            'id_coupe_principe'=> session()->get('coupeprincipe.id_coupe_principe')
+        ]);
+        $produit->save();
+//        $produit->fresh();
+
+        foreach(session()->get('modules') as $module){
+
+            $moduleproduit = new moduleproduit([
+                'id_module'=> $module->id_module,
+                'id_produit'=> $produit->id_produit
+            ]);
+            $moduleproduit->save();
+        }
+
+        // produit devis
+        $produitdevis = new produitdevis([
+            'id_devis'=> session()->get('id_devis'),
+            'id_produit'=> $produit->id_produit,
+            'quantite_produit'=> $request->quantite_produit
+        ]);
+        $produitdevis->save();
+
+        $devis = devis::find(session()->get('id_devis'));
+
+
+        $listeproduits = DB::table('produit')->join('produit_devis', 'produit.id_produit', '=', 'produit_devis.id_produit')
+            ->Where('produit_devis.id_devis', '=', session()->get('id_devis'));
+        $listeproduits = $listeproduits->get();
+
+        $devisController = new DevisController();
+        $devis->prix_total_ht = $devisController->calculPrixTotalHt($devis->montant_frais_deplacement, $devis->prix_prestation, $listeproduits);
+        $devis->montant_tva = $devisController->calculMontantTva($devis->prix_total_ht, $devis->taux_tva);
         $devis->save();
 
-        return redirect('/deviss')->with('success', 'Le devis a été mis a jour');
+        session()->pull('couverture');
+        session()->pull('cctp');
+        session()->pull('coupeprincipe');
+        session()->pull('gamme');
+        session()->pull('modules');
+        session()->pull('produit');
+        session()->pull('backUrl');
+
+        return redirect('/produits')->with('success', 'Le produit a été mis a jour');
     }
 
     /**
@@ -211,17 +303,24 @@ class ProduitController extends Controller
      * @param  int  $id_devis
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id_devis)
+    public function destroy($id_produit)
     {
-        $devis = devis::find($id_devis);
-        $devis->delete();
+        $produit = produit::find($id_produit);
+        $produit->delete();
 
-        return redirect('/deviss')->with('success', 'Un devis a été supprimé');
+        return redirect('/produits')->with('success', 'Un produit a été supprimé');
     }
 
     public function deleteModule(Request $request)
     {
-        session()->pull('modules.' . $request->key_module);
+        // $request->get('key_module') ==> 2
+        session()->pull('modules.' . $request->get('key_module'));
+        $modules = session()->get('modules');
+        $modules->pull($request->get('key_module'));
+        session()->put('modules', $modules);
+        if (strpos(session()->get('backUrl'), 'edit') !== false) {
+            return redirect('/produits/'. session()->get('produit.id_produit') .'/edit');
+        }
         return redirect('/produits/create');
 
     }
@@ -249,5 +348,15 @@ class ProduitController extends Controller
         }
 
         return $prix;
+    }
+
+    public function initializeSession(){
+        session()->forget('couverture');
+        session()->forget('cctp');
+        session()->forget('coupeprincipe');
+        session()->forget('gamme');
+        session()->forget('modules');
+        session()->forget('produit');
+        session()->forget('backUrl');
     }
 }

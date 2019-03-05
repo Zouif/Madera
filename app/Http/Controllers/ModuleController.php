@@ -153,6 +153,10 @@ class ModuleController extends Controller
     {
         $module = module::find($request->id_module);
         session()->push('modules', $module);
+        session()->put('backUrl', $request->backUrl);
+        if (strpos(session()->get('backUrl'), 'edit') !== false) {
+            return redirect('/produits/'. session()->get('produit.id_produit') .'/edit');
+        }
         return redirect('/produits/create');
 
     }

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\DevisController;
 use App\Devis;
 use App\Produit;
+use App\ProduitDevis;
+use App\ModuleProduit;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -15,11 +18,19 @@ class ProduitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         $listeproduits = DB::table('produit')->join('produit_devis', 'produit.id_produit', '=', 'produit_devis.id_produit')
-            ->Where('produit_devis.id_devis', '=', $request->id_devis);
+            ->Where('produit_devis.id_devis', '=', session()->get('id_devis'));
         $listeproduits = $listeproduits->get();
+
+//        foreach($listeproduits as $produit){
+//            $produitdevis = DB::table('produit_devis')->where('id_produit', '=', $produit->id_produit);
+//            $produitdevis = $produitdevis->get();
+//
+//            dd($produit);
+//            $produit->setAttribute('quantite_produit',$produitdevis->quantite_produit);
+//        }
 
         return view('produits.index', ['listeproduits' => $listeproduits]);
     }
@@ -72,7 +83,7 @@ class ProduitController extends Controller
             ->orWhere('date_devis', 'like', '%' . $search . '%')
             ->orWhere('ref_devis', 'like', '%' . $search . '%');
         $deviss = $deviss->get();
-        return view('deviss.index', ['deviss' => $deviss]);
+        return view('devis.index', ['devis' => $deviss]);
     }
     /**
      * Store a newly created resource in storage.
@@ -80,47 +91,70 @@ class ProduitController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $ref)
+    public function store(Request $request)
     {
 
         $request->validate([
-            'ref_client'=>'required',
-            'nom_devis'=>'required'
+            'nom_produit'=>'required',
+            'quantite_produit'=>'required',
+            'prix_produit_ht'=>'required',
+            'nom_couverture'=>'required',
+            'nom_cctp'=>'required',
+            'nom_coupe_principe'=>'required',
+            'nom_gamme'=>'required',
+            'nom_module'=>'required'
 
         ]);
 
-        $clients = DB::table('client')->where('ref_client', '=', $request->get('ref_client'));
-        $clients = $clients->get();
+
+        $produit = new produit([
+            'nom_produit'=> $request->nom_produit,
+            'taux_tva'=> 0,
+            'prix_produit_ht'=> $request->prix_produit_ht,
+            'id_couverture'=> session()->get('couverture.id_couverture'),
+            'id_cctp'=> session()->get('cctp.id_cctp'),
+            'id_gamme'=> session()->get('gamme.id_gamme'),
+            'id_coupe_principe'=> session()->get('coupeprincipe.id_coupe_principe')
+        ]);
+        $produit->save();
+//        $produit->fresh();
+
+        foreach(session()->get('modules') as $module){
+
+            $moduleproduit = new moduleproduit([
+                'id_module'=> $module->id_module,
+                'id_produit'=> $produit->id_produit
+            ]);
+            $moduleproduit->save();
+        }
+
+        // produit devis
+        $produitdevis = new produitdevis([
+            'id_devis'=> session()->get('id_devis'),
+            'id_produit'=> $produit->id_produit,
+            'quantite_produit'=> $request->quantite_produit
+        ]);
+        $produitdevis->save();
+
+        $devis = devis::find(session()->get('id_devis'));
 
 
-        $projets = DB::table('projet')->where('ref_client', '=', $ref);
-        $projets = $projets->get();
+        $listeproduits = DB::table('produit')->join('produit_devis', 'produit.id_produit', '=', 'produit_devis.id_produit')
+            ->Where('produit_devis.id_devis', '=', session()->get('id_devis'));
+        $listeproduits = $listeproduits->get();
 
-//        $devis = new devis([
-//
-//            'id_etat_devis'=> 1,
-//            'id_entreprise'=> 1,
-//            'id_projet'=> $projets[0]->id_client,
-//            'id_tva'=> 1,
-//            'date_devis'=> Carbon::now()->toDateTimeString(),
-//            'duree_validite_devis'=> Carbon::now()->toDateTimeString() + 654,
-//            'taux_horaire_main_oeuvre'=>,
-//            'montant_frais_deplacement'=>,
-//            'prix_prestation'=>,
-//            'modalite_decompte_passe'=>,
-//            'taux_tva'=>,
-//            'montant_tva'=>,
-//            'prix_total_ht'=>,
-//
-//            'id_client' => $clients[0]->id_client,
-//            'id_user'=> auth()->id(),
-//            'nom_devis'=> $request->get('nom_devis'),
-//            'date_devis' => Carbon::now()->toDateTimeString(),
-//
-//            'ref_devis'=> str_random(10)
-//        ]);
-//        $devis->save();
-        return redirect('/deviss')->with('success', 'Un devis a été rajouté');
+        $devisController = new DevisController();
+        $devis->prix_total_ht = $devisController->calculPrixTotalHt($devis->montant_frais_deplacement, $devis->prix_prestation, $listeproduits);
+        $devis->montant_tva = $devisController->calculMontantTva($devis->prix_total_ht, $devis->taux_tva);
+        $devis->save();
+
+        session()->pull('couverture');
+        session()->pull('cctp');
+        session()->pull('coupeprincipe');
+        session()->pull('gamme');
+        session()->pull('modules');
+
+        return redirect('/produits')->with('success', 'Un devis a été rajouté');
     }
 
     /**
@@ -129,10 +163,10 @@ class ProduitController extends Controller
      * @param  int  $id_devis
      * @return \Illuminate\Http\Response
      */
-    public function show($id_projet)
+    public function show($id_devis)
     {
-        session()->put('id_projet', $id_projet);
-        return redirect('/devis');
+        session()->put('id_devis', $id_devis);
+        return redirect('/produits');
     }
 
     /**

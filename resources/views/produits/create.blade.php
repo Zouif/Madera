@@ -21,7 +21,7 @@
                     </ul>
                 </div><br />
             @endif
-            <form method="post" action="{{ route('projets.store') }}">
+            <form method="post" action="{{ route('produits.store') }}">
                 @csrf
                 <div class="form-group">
                     <label for="nom">nom produit:</label>
@@ -31,6 +31,10 @@
                     {{--<label for="nom">taux tva:</label>--}}
                     {{--<input type="text" class="form-control" name="nom_projet"/>--}}
                 {{--</div>--}}
+                <div class="form-group">
+                    <label for="nom">nombre produit:</label>
+                    <input type="text" class="form-control" name="quantite_produit"/>
+                </div>
                 <div class="form-group">
                     <label for="nom">prix produit ht:</label>
                     <input type="text" class="form-control" name="prix_produit_ht" value="{{ session()->get('prix_produit_ht') }}"/>
@@ -45,7 +49,7 @@
                         </a>
                     </div>
                     @if(session()->get('couverture'))
-                        <input type="text" class="form-control" name="ref_client" disabled="disabled" value="{{ session()->get('couverture.nom_couverture') }}"/>
+                        <input type="text" class="form-control" name="nom_couverture" value="{{ session()->get('couverture.nom_couverture') }}" readonly/>
                     @endif
 
                     {{--CCTP--}}
@@ -55,7 +59,7 @@
                         </a>
                     </div>
                     @if(session()->get('cctp'))
-                        <input type="text" class="form-control" name="ref_client" disabled="disabled" value="{{ session()->get('cctp.nom_cctp') }}"/>
+                        <input type="text" class="form-control" name="nom_cctp" value="{{ session()->get('cctp.nom_cctp') }}" readonly/>
                     @endif
 
                     {{--COUPE PRINCIPE--}}
@@ -65,7 +69,7 @@
                         </a>
                     </div>
                     @if(session()->get('coupeprincipe'))
-                        <input type="text" class="form-control" name="ref_client" disabled="disabled" value="{{ session()->get('coupeprincipe.nom_coupe_principe') }}"/>
+                        <input type="text" class="form-control" name="nom_coupe_principe" value="{{ session()->get('coupeprincipe.nom_coupe_principe') }}" readonly/>
                     @endif
 
                     {{--GAMME--}}
@@ -75,7 +79,7 @@
                         </a>
                     </div>
                     @if(session()->get('gamme'))
-                        <input type="text" class="form-control" name="ref_client" disabled="disabled" value="{{ session()->get('gamme.nom_gamme') }}"/>
+                        <input type="text" class="form-control" name="nom_gamme" value="{{ session()->get('gamme.nom_gamme') }}" readonly/>
                     @endif
 
                     {{--MODULE--}}
@@ -87,7 +91,7 @@
                     @if(session()->get('modules'))
                         @foreach (session()->get('modules') as $key=>$module)
                             <div class="input-group m-2">
-                                <input type="text" class="form-control" name="nom_module" disabled="disabled" value="{{ $module->nom_module }}"/>
+                                <input type="text" class="form-control" name="nom_module" value="{{ $module->nom_module }}" readonly/>
                                 <a href="{{ action('DevisController@deleteModule', ['key_module' => $key]) }}" class="btn btn-danger">Supprimer</a>
                             </div>
                         @endforeach

@@ -22,6 +22,7 @@
             <thead>
             <tr>
                 <td>nom_produit</td>
+                <td>quantite_produit</td>
                 <td> prix_produit_ht</td>
                 <td> id_couverture</td>
                 <td> id_cctp</td>
@@ -34,6 +35,7 @@
             @foreach($listeproduits as $produit)
                 <tr>
                     <td>{{$produit->nom_produit}}</td>
+                    <td>{{$produit->quantite_produit}}</td>
                     <td>{{$produit->prix_produit_ht}}</td>
                     <td>{{$produit->id_couverture}}</td>
                     <td>{{$produit->id_cctp}}</td>

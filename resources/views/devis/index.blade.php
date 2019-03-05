@@ -46,9 +46,9 @@
                     <td>{{$devis->montant_tva}}</td>
                     <td>{{$devis->prix_total_ht}}</td>
                     <td><a href="{{ route('devis.edit',$devis->id_devis)}}" class="btn btn-primary">Edit</a></td>
-                    <td><a href="{{ route('produits.index',$devis->id_devis)}}" class="btn btn-primary">Produits</a></td>
+                    <td><a href="{{ route('produits.show', $devis->id_devis) }}" class="btn btn-primary">Produits</a></td>
                     <td>
-                        <form action="{{ route('devis.destroy', $devis->id_devis)}}" method="post">
+                        <form action="{{ route('devis.destroy', $devis->id_devis) }}" method="post">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-danger" type="submit">Delete</button>

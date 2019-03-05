@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $prix_total_ht
  * @property string $ref_devis
  * @property Entreprise $entreprise
- * @property EtatDevi $etatDevi
+ * @property EtatDevis $etatDevi
  * @property Projet $projet
  * @property Tva $tva
  * @property EchelonPaiement[] $echelonPaiements
@@ -56,7 +56,7 @@ class Devis extends Model
      */
     public function etatDevi()
     {
-        return $this->belongsTo('App\EtatDevi', 'id_etat_devis', 'id_etat_devis');
+        return $this->belongsTo('App\EtatDevis', 'id_etat_devis', 'id_etat_devis');
     }
 
     /**

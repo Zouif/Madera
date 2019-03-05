@@ -189,7 +189,7 @@ class DevisController extends Controller
 
         $prix_total = 0;
         foreach($listeproduits as $produit){
-            $prix_total += DevisCOntroller::calculPrixProduit($produit);
+            $prix_total += (DevisCOntroller::calculPrixProduit($produit)*$produit->quantite_produit);
         }
         return $prix_total;
     }
@@ -206,8 +206,12 @@ class DevisController extends Controller
         $prix += $coupeprincipe->prix_coupe_principe;
         $gamme = gamme::find($produit->id_gamme);
         $prix += $gamme->prix_gamme;
-        foreach($produit->id_module as $id_module){
-            $module = module::find($id_module);
+
+        $moduleproduit = DB::table('module_produit')->where('id_produit', '=', $produit->id_produit);
+        $moduleproduit = $moduleproduit->get();
+
+        foreach($moduleproduit as $module){
+            $module = module::find($module->id_module);
             $prix += $module->prix_module;
         }
 

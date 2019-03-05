@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $nom_etat_devis
  * @property Devi[] $devis
  */
-class EtatDevi extends Model
+class EtatDevis extends Model
 {
     public $timestamps = false;
     /**

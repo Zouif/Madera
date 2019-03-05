@@ -8,23 +8,23 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id_devis
  * @property int $id_produit
  * @property int $quantite_produit
- * @property Devi $devi
+ * @property Devi $devis
  * @property Produit $produit
  */
-class ProduitDevi extends Model
+class ProduitDevis extends Model
 {
     public $timestamps = false;
     /**
      * @var array
      */
-    protected $fillable = ['quantite_produit'];
+    protected $fillable = ['id_devis', 'id_produit', 'quantite_produit'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function devi()
+    public function devis()
     {
-        return $this->belongsTo('App\Devi', 'id_devis', 'id_devis');
+        return $this->belongsTo('App\Devis', 'id_devis', 'id_devis');
     }
 
     /**

@@ -52,7 +52,7 @@
         </ul>
     </div>
 </nav>
-<div class="container">
+<div class="m-5">
     @yield('content')
 </div>
 <script src="{{ asset('js/app.js') }}" type="text/js"></script>

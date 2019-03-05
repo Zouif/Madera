@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 class ProduitDevis extends Model
 {
     public $timestamps = false;
+
+    protected $primaryKey = 'id_produit';
     /**
      * @var array
      */

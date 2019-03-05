@@ -15,10 +15,10 @@ class ProduitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $listeproduits = DB::table('produit')->join('produit_devis', 'produit.id_produit', '=', 'produit_devis.id_produit')
-            ->Where('produit_devis.id_devis', '=', 1);
+            ->Where('produit_devis.id_devis', '=', $request->id_devis);
         $listeproduits = $listeproduits->get();
 
         return view('produits.index', ['listeproduits' => $listeproduits]);
@@ -57,7 +57,7 @@ class ProduitController extends Controller
             );
 
 
-        return view('devis.create');
+        return view('produits.create');
     }
 
 

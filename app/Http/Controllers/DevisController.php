@@ -21,7 +21,8 @@ class DevisController extends Controller
      */
     public function index()
     {
-        $listedevis = devis::all()->Where('id_projet', '=', session()->get('id_projet'));
+        $listedevis = devis::all()->Where('id_projet', '=', session()->get('id_projet'))
+            ->Where('archive', '=', false);
 
         return view('devis.index', ['listedevis' => $listedevis]);
     }
@@ -163,9 +164,10 @@ class DevisController extends Controller
     public function destroy($id_devis)
     {
         $devis = devis::find($id_devis);
-        $devis->delete();
+        $devis->archive = true;
+        $devis->save();
 
-        return redirect('/deviss')->with('success', 'Un devis a été supprimé');
+        return redirect('/devis')->with('success', 'Un devis a été supprimé');
     }
 
     public function deleteModule(Request $request)

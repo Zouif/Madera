@@ -7,6 +7,10 @@ use App\Devis;
 use App\Module;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\couverture;
+use App\cctp;
+use App\Coupeprincipe;
+use App\gamme;
 
 class DevisController extends Controller
 {
@@ -29,28 +33,9 @@ class DevisController extends Controller
      */
     public function create()
     {
-//
-//        $devis = new devis([
-//            'id_etat_devis'=> 1,
-//            'id_entreprise'=> 1,
-//            'id_projet'=> session()->get('id_projet'),
-//            'id_tva'=> 1,
-//            'date_devis'=> Carbon::now()->toDateString(),
-//            'duree_validite_devis'=> 90,
-//            'taux_horaire_main_oeuvre'=> 0,
-//            'montant_frais_deplacement'=> 0,
-//            'prix_prestation'=> 0,
-//            'modalite_decompte_passe'=> 0,
-//            'taux_tva'=> 0,
-//            'montant_tva'=> 0,
-//            'prix_total_ht'=> 0,
-//            'ref_devis'=> str_random(10)
-//        ]);
-//        $devis->save();
-
         session()->put('prix_produit_ht',
 
-            DevisController::calculPrixProduit()
+            DevisController::calculPrixProduitFaux()
 
             );
 
@@ -78,47 +63,35 @@ class DevisController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $ref)
+    public function store(Request $request)
     {
 
         $request->validate([
-            'ref_client'=>'required',
-            'nom_devis'=>'required'
-
+            'duree_validite_devis'=>'required',
+            'taux_horaire_main_oeuvre'=>'required',
+            'montant_frais_deplacement'=>'required',
+            'prix_prestation'=>'required',
+            'taux_tva'=>'required'
         ]);
 
-        $clients = DB::table('client')->where('ref_client', '=', $request->get('ref_client'));
-        $clients = $clients->get();
-
-
-        $projets = DB::table('projet')->where('ref_client', '=', $ref);
-        $projets = $projets->get();
-
-//        $devis = new devis([
-//
-//            'id_etat_devis'=> 1,
-//            'id_entreprise'=> 1,
-//            'id_projet'=> $projets[0]->id_client,
-//            'id_tva'=> 1,
-//            'date_devis'=> Carbon::now()->toDateTimeString(),
-//            'duree_validite_devis'=> Carbon::now()->toDateTimeString() + 654,
-//            'taux_horaire_main_oeuvre'=>,
-//            'montant_frais_deplacement'=>,
-//            'prix_prestation'=>,
-//            'modalite_decompte_passe'=>,
-//            'taux_tva'=>,
-//            'montant_tva'=>,
-//            'prix_total_ht'=>,
-//
-//            'id_client' => $clients[0]->id_client,
-//            'id_user'=> auth()->id(),
-//            'nom_devis'=> $request->get('nom_devis'),
-//            'date_devis' => Carbon::now()->toDateTimeString(),
-//
-//            'ref_devis'=> str_random(10)
-//        ]);
-//        $devis->save();
-        return redirect('/deviss')->with('success', 'Un devis a été rajouté');
+        $devis = new devis([
+            'id_etat_devis'=> 1,
+            'id_entreprise'=> 1,
+            'id_projet'=> session()->get('id_projet'),
+            'id_tva'=> 1,
+            'date_devis'=> Carbon::now()->toDateTimeString(),
+            'duree_validite_devis'=> $request->duree_validite_devis,
+            'taux_horaire_main_oeuvre'=>$request->taux_horaire_main_oeuvre,
+            'montant_frais_deplacement'=>$request->montant_frais_deplacement,
+            'prix_prestation'=>$request->prix_prestation,
+            'modalite_decompte_passe'=>20,
+            'taux_tva'=>$request->taux_tva,
+            'montant_tva'=>$request->taux_tva/100 * ($request->prix_prestation+$request->montant_frais_deplacement),
+            'prix_total_ht'=>$request->prix_prestation+$request->montant_frais_deplacement,
+            'ref_devis'=> str_random(10)
+        ]);
+        $devis->save();
+        return redirect('/devis')->with('success', 'Un devis a été rajouté');
     }
 
     /**
@@ -141,10 +114,9 @@ class DevisController extends Controller
      */
     public function edit($id_devis)
     {
-
         $devis = devis::find($id_devis);
 
-        return view('deviss.edit', compact('devis'));
+        return view('devis.edit', compact('devis'));
     }
 
     /**
@@ -157,16 +129,29 @@ class DevisController extends Controller
     public function update(Request $request, $id_devis)
     {
         $request->validate([
-            'nom_devis'=>'required',
-            'date_devis'=>'required'
+            'duree_validite_devis'=>'required',
+            'taux_horaire_main_oeuvre'=>'required',
+            'montant_frais_deplacement'=>'required',
+            'prix_prestation'=>'required',
+            'taux_tva'=>'required'
         ]);
 
         $devis = devis::find($id_devis);
-        $devis->nom_devis = $request->get('nom_devis');
-        $devis->date_devis = $request->get('date_devis');
+
+        $listeproduits = DB::table('produit')->join('produit_devis', 'produit.id_produit', '=', 'produit_devis.id_produit')
+            ->Where('produit_devis.id_devis', '=', $id_devis);
+        $listeproduits = $listeproduits->get();
+
+        $devis->duree_validite_devis = $request->get('duree_validite_devis');
+        $devis->taux_horaire_main_oeuvre = $request->get('taux_horaire_main_oeuvre');
+        $devis->montant_frais_deplacement = $request->get('montant_frais_deplacement');
+        $devis->prix_prestation = $request->get('prix_prestation');
+        $devis->taux_tva = $request->get('taux_tva');
+        $devis->prix_total_ht = DevisController::calculPrixTotalHt($devis->montant_frais_deplacement, $devis->prix_prestation, $listeproduits);
+        $devis->montant_tva = DevisController::calculMontantTva($devis->prix_total_ht, $devis->taux_tva);
         $devis->save();
 
-        return redirect('/deviss')->with('success', 'Le devis a été mis a jour');
+        return redirect('/devis')->with('success', 'Le devis a été mis a jour');
     }
 
     /**
@@ -190,9 +175,49 @@ class DevisController extends Controller
 
     }
 
-    public function calculPrixProduit(){
+    public function calculMontantTva($prix_total_ht, $taux_tva){
+        return $prix_total_ht * $taux_tva/100;
+    }
+
+    public function calculPrixTotalHt($montant_frais_deplacement, $prix_prestation, $listeproduits){
+        return $montant_frais_deplacement + $prix_prestation + DevisController::calculPrixProduits($listeproduits);
+    }
+
+    public function calculPrixProduits($listeproduits){
+
+        $prix_total = 0;
+        foreach($listeproduits as $produit){
+            $prix_total += DevisCOntroller::calculPrixProduit($produit);
+        }
+        return $prix_total;
+    }
+
+    public function calculPrixProduit($produit){
 
         $prix = 0;
+
+        $couverture = couverture::find($produit->id_couverture);
+        $prix += $couverture->prix_couverture;
+        $cctp = cctp::find($produit->id_cctp);
+        $prix += $cctp->prix_cctp;
+        $coupeprincipe = coupeprincipe::find($produit->id_coupe_principe);
+        $prix += $coupeprincipe->prix_coupe_principe;
+        $gamme = gamme::find($produit->id_gamme);
+        $prix += $gamme->prix_gamme;
+        foreach($produit->id_module as $id_module){
+            $module = module::find($id_module);
+            $prix += $module->prix_module;
+        }
+
+        return $prix;
+    }
+
+
+    public function calculPrixProduitFaux(){
+
+        $prix = 0;
+
+
 
         if(session()->has('couverture')){
             $prix += session()->get('couverture.prix_couverture');

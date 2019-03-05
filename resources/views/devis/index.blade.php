@@ -27,7 +27,6 @@
                 <td> taux_horaire_main_oeuvre</td>
                 <td> montant_depla</td>
                 <td> prix_presta</td>
-                <td> moda</td>
                 <td> taux_tva</td>
                 <td> montant_tva</td>
                 <td> prix_total_ht</td>
@@ -43,13 +42,12 @@
                     <td>{{$devis->taux_horaire_main_oeuvre}}</td>
                     <td>{{$devis->montant_frais_deplacement}}</td>
                     <td>{{$devis->prix_prestation}}</td>
-                    <td>{{$devis->modalite_decompte_passe}}</td>
                     <td>{{$devis->taux_tva}}</td>
                     <td>{{$devis->montant_tva}}</td>
                     <td>{{$devis->prix_total_ht}}</td>
-                    <td><a href="{{ route('projets.edit',$devis->id_devis)}}" class="btn btn-primary">Edit</a></td>
+                    <td><a href="{{ route('devis.edit',$devis->id_devis)}}" class="btn btn-primary">Edit</a></td>
                     <td>
-                        <form action="{{ route('projets.destroy', $devis->id_devis)}}" method="post">
+                        <form action="{{ route('devis.destroy', $devis->id_devis)}}" method="post">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-danger" type="submit">Delete</button>

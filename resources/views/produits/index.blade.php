@@ -13,31 +13,35 @@
             </div><br />
         @endif
             <div class="text-center mb-3">
-                <a href="{{ url('/devis/create') }}" class="">
-                    <button type="submit" class="btn btn-primary">Creer un nouveau devis</button>
+                <a href="{{ url('/produits/create') }}" class="">
+                    <button type="submit" class="btn btn-primary">Ajouter un produit</button>
                 </a>
             </div>
 
         <table class="table table-striped">
             <thead>
             <tr>
-                <td>ID Client</td>
-                <td> nom</td>
-                <td> date</td>
-                <td> ref</td>
+                <td>nom_produit</td>
+                <td> prix_produit_ht</td>
+                <td> id_couverture</td>
+                <td> id_cctp</td>
+                <td> id_gamme</td>
+                <td> id_coupe_principe</td>
                 <td colspan="2">Action</td>
             </tr>
             </thead>
             <tbody>
-            @foreach($listedevis as $devis)
+            @foreach($listeproduits as $produit)
                 <tr>
-                    <td>{{$devis->id_client}}</td>
-                    <td>{{$devis->nom_projet}}</td>
-                    <td>{{$devis->date_projet}}</td>
-                    <td>{{$devis->ref_projet}}</td>
-                    <td><a href="{{ route('projets.edit',$devis->id_devis)}}" class="btn btn-primary">Edit</a></td>
+                    <td>{{$produit->nom_produit}}</td>
+                    <td>{{$produit->prix_produit_ht}}</td>
+                    <td>{{$produit->id_couverture}}</td>
+                    <td>{{$produit->id_cctp}}</td>
+                    <td>{{$produit->id_gamme}}</td>
+                    <td>{{$produit->id_coupe_principe}}</td>
+                    <td><a href="{{ route('produits.edit',$produit->id_produit)}}" class="btn btn-primary">Edit</a></td>
                     <td>
-                        <form action="{{ route('projets.destroy', $devis->id_devis)}}" method="post">
+                        <form action="{{ route('produits.destroy', $produit->id_produit)}}" method="post">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-danger" type="submit">Delete</button>

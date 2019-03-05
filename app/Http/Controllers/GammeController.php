@@ -144,7 +144,7 @@ class GammeController extends Controller
     {
         $gamme = gamme::find($request->id_gamme);
         session()->put('gamme', $gamme);
-        return redirect('/devis/create');
+        return redirect('/produits/create');
 
     }
 }

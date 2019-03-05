@@ -128,7 +128,7 @@ class CctpController extends Controller
     {
         $cctp = cctp::find($request->id_cctp);
         session()->put('cctp',$cctp);
-        return redirect('/devis/create');
+        return redirect('/produits/create');
 
     }
 }

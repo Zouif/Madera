@@ -190,7 +190,7 @@ class DevisController extends Controller
 
     }
 
-    private function calculPrixProduit(){
+    public function calculPrixProduit(){
 
         $prix = 0;
 

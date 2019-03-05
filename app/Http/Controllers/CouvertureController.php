@@ -141,7 +141,7 @@ class CouvertureController extends Controller
     {
         $couverture = couverture::find($request->id_couverture);
         session()->put('couverture', $couverture);
-        return redirect('/devis/create');
+        return redirect('/produits/create');
 
     }
 }

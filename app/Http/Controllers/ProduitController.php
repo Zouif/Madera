@@ -17,9 +17,11 @@ class ProduitController extends Controller
      */
     public function index()
     {
-        $listedevis = devis::all()->Where('id_projet', '=', session()->get('id_projet'));
+        $listeproduits = DB::table('produit')->join('produit_devis', 'produit.id_produit', '=', 'produit_devis.id_produit')
+            ->Where('produit_devis.id_devis', '=', 1);
+        $listeproduits = $listeproduits->get();
 
-        return view('devis.index', ['listedevis' => $listedevis]);
+        return view('produits.index', ['listeproduits' => $listeproduits]);
     }
 
     /**
@@ -50,7 +52,7 @@ class ProduitController extends Controller
 
         session()->put('prix_produit_ht',
 
-            DevisController::calculPrixProduit()
+            ProduitController::calculPrixProduit()
 
             );
 

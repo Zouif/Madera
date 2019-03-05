@@ -128,7 +128,7 @@ class CoupeprincipeController extends Controller
     {
         $coupeprincipe = coupeprincipe::find($request->id_coupe_principe);
         session()->put('coupeprincipe',$coupeprincipe);
-        return redirect('/devis/create');
+        return redirect('/produits/create');
 
     }
 }

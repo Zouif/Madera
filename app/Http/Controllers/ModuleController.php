@@ -153,7 +153,7 @@ class ModuleController extends Controller
     {
         $module = module::find($request->id_module);
         session()->push('modules', $module);
-        return redirect('/devis/create');
+        return redirect('/produits/create');
 
     }
 }

@@ -45,10 +45,17 @@ Route::group(['middleware' => 'auth'], function(){
     ]);
     Route::resource('devis', 'DevisController');
 
+
+    //Produit
+    Route::get('/devis/delete/produit', [
+        'uses' => 'ProduitController@deleteModule'
+    ]);
+    Route::resource('produits', 'ProduitController');
+
     //Module
     Route::get('/modules', 'ModuleController@index');
     Route::get('/searchModules', 'ModuleController@search');
-    Route::get('/devis/create/module', [
+    Route::get('/produits/create/module', [
         'uses' => 'ModuleController@sendToDevis'
     ]);
     Route::resource('modules', 'ModuleController');
@@ -56,14 +63,14 @@ Route::group(['middleware' => 'auth'], function(){
     //Couverture
     Route::get('/couvertures', 'CouvertureController@index');
     Route::get('/searchCouvertures', 'CouvertureController@search');
-    Route::get('/devis/create/couverture', [
+    Route::get('/produits/create/couverture', [
         'uses' => 'CouvertureController@sendToDevis'
     ]);
     Route::resource('couvertures', 'CouvertureController');
 
     //Cctp
     Route::get('/searchCctp', 'CctpController@search');
-    Route::get('/devis/create/cctp', [
+    Route::get('/produits/create/cctp', [
         'uses' => 'CctpController@sendToDevis'
     ]);
     Route::resource('cctps', 'CctpController');
@@ -71,14 +78,14 @@ Route::group(['middleware' => 'auth'], function(){
     //Coupe Principe
     Route::resource('coupeprincipes', 'CoupeprincipeController');
     Route::get('/searchCoupeprincipes', 'CoupeprincipeController@search');
-    Route::get('/devis/create/coupeprincipe', [
+    Route::get('/produits/create/coupeprincipe', [
         'uses' => 'CoupeprincipeController@sendToDevis'
     ]);
 
     //Gamme
     Route::get('/gammes', 'GammeController@index');
     Route::get('/searchGammes', 'GammeController@search');
-    Route::get('/devis/create/gamme', [
+    Route::get('/produits/create/gamme', [
         'uses' => 'GammeController@sendToDevis'
     ]);
     Route::resource('gammes', 'GammeController');

@@ -92,7 +92,7 @@
                         @foreach (session()->get('modules') as $key=>$module)
                             <div class="input-group m-2">
                                 <input type="text" class="form-control" name="nom_module" value="{{ $module->nom_module }}" readonly/>
-                                <a href="{{ action('DevisController@deleteModule', ['key_module' => $key]) }}" class="btn btn-danger">Supprimer</a>
+                                <a href="{{ action('ProduitController@deleteModule', ['key_module' => $key]) }}" class="btn btn-danger">Supprimer</a>
                             </div>
                         @endforeach
                     @endif

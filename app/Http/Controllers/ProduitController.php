@@ -222,7 +222,7 @@ class ProduitController extends Controller
     public function deleteModule(Request $request)
     {
         session()->pull('modules.' . $request->key_module);
-        return redirect('/devis/create');
+        return redirect('/produits/create');
 
     }
 

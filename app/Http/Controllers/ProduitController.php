@@ -315,7 +315,8 @@ class ProduitController extends Controller
     public function deleteModule(Request $request)
     {
         // $request->get('key_module') ==> 2
-        session()->pull('modules.' . $request->get('key_module'));
+        dd(session()->get('modules'));
+        session()->get('modules.' . $request->get('key_module'));
         $modules = session()->get('modules');
         $modules->pull($request->get('key_module'));
         session()->put('modules', $modules);

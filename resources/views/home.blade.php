@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-<div class="container">
+<div class="container" id="page_home">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -18,6 +18,10 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="ocean">
+        <div class="wave"></div>
+        <div class="wave"></div>
     </div>
 </div>
 @endsection

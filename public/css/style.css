@@ -1,0 +1,123 @@
+#page_login > div > div:nth-child(1) > div > img {
+    width: 100%;
+}
+
+#page_login > div > div:nth-child(2) > div > form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    margin-left: 20px;
+}
+
+.btn_green {
+    background-color: #06BA74;
+    border-radius: 15px;
+    width: 150px;
+    border: none;
+    outline: none;
+}
+
+.btn_green:hover {
+    background-color: #06809F;
+}
+
+.btn_green:focus {
+    outline: none;
+}
+
+#page_login > div > div:nth-child(2) > div > form > div {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+#page_login > div > div:nth-child(2) > div > form > div > label {
+    text-align: left!important;
+    padding-top: unset;
+    padding-bottom: unset;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#page_login > div > div:nth-child(2) > div > form > div:nth-child(4) > div {
+    margin-left: 10px;
+}
+
+#page_login > div > div:nth-child(2) > div > form > div.form-group.row.mb-0 > div {
+    margin-left: 10px;
+}
+
+#login, #password {
+    background-color: #f1f1f1;
+    width: 100%;
+    border-radius: 0;
+}
+
+#login:focus, #password:focus {
+    outline: none;
+}
+
+#page_login > div > div:nth-child(2) > div > form > div:nth-child(2) > div {
+    width: 100%;
+}
+
+/* Accueil */
+
+.ocean {
+    height: 200px;
+    width:100%;
+    overflow: hidden;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.ocean.v01 .wave {
+    background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg) repeat-x;
+    filter: hue-rotate(-50deg);
+}
+
+.ocean.v01 {
+    transform: rotate(180deg);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.wave {
+    background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg) repeat-x;
+    position: absolute;
+    bottom: -25px;
+    width: 6400px;
+    height: 100%;
+    animation: wave 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) infinite;
+    transform: translate3d(0, 0, 0);
+    filter: hue-rotate(-50deg);
+}
+
+.wave:nth-of-type(2) {
+    bottom: -25px;
+    animation: wave 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) -.125s infinite, swell 7s ease -1.25s infinite;
+    opacity: 1;
+}
+
+@keyframes wave {
+    0% {
+        margin-left: 0;
+    }
+    100% {
+        margin-left: -1600px;
+    }
+}
+
+@keyframes swell {
+    0%, 100% {
+        transform: translateY(-25px);
+    }
+    50% {
+        transform: translateY(5px);
+    }
+}
+
+

@@ -170,13 +170,6 @@ class DevisController extends Controller
         return redirect('/devis')->with('success', 'Un devis a été supprimé');
     }
 
-    public function deleteModule(Request $request)
-    {
-        session()->pull('modules.' . $request->key_module);
-        return redirect('/devis/create');
-
-    }
-
     public function calculMontantTva($prix_total_ht, $taux_tva){
         return $prix_total_ht * $taux_tva/100;
     }

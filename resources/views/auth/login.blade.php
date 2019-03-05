@@ -1,11 +1,11 @@
 @extends('layout')
 
 @section('content')
-<div class="container">
+<div class="container" id="page_login">
     <div class="card-group">
             <div class="card">
                 <div class="card-body">
-                    <p>image Logo Madera</p>
+                    <img src="{{ asset('logo.png') }}"/>
                 </div>
             </div>
         {{--<div class="col">--}}
@@ -72,7 +72,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary btn_green">
                                     {{ __('CONNEXION') }}
                                 </button>
 

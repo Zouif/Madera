@@ -100,6 +100,9 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Add</button>
+                <a href="{{ url('produits')}}" class="btn btn-primary">
+                    Retour liste produits
+                </a>
             </form>
         </div>
     </div>

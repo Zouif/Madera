@@ -40,10 +40,10 @@
                     <td>{{$module->description_module}}</td>
                     <td>{{$module->prix_module}}</td>
                     <td><a href="{{ action('ModuleController@sendToDevis', ['id_module' =>$module->id_module])}}" class="btn btn-primary">Add</a></td>
-                    <td><a href="{{ route('modules.edit',$module->id_module)}}" class="btn btn-primary">Edit</a></td>
                 </tr>
             @endforeach
             </tbody>
+
         </table>
         <div>
 @endsection
